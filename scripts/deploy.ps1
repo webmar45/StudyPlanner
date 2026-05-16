@@ -19,8 +19,7 @@ Write-Host @"
    - Connection string -> smart_study_planner database
 
 2) Render (backend)
-   - https://dashboard.render.com -> New -> Blueprint
-   - Repo: StudyPlanner, blueprint: render.yaml
+   - One-click: https://render.com/deploy?repo=https://github.com/webmar45/StudyPlanner
    - Set MONGODB_URI and CORS_ALLOWED_ORIGINS (after step 3)
 
 3) Cloudflare Pages (frontend)

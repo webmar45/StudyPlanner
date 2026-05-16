@@ -67,6 +67,8 @@ Use `postman_collection.json` to import ready-to-use examples.
 
 Stack: **MongoDB Atlas** + **Render** (API) + **Cloudflare Pages** (UI). See [`render.yaml`](render.yaml) for the Render Blueprint.
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/webmar45/StudyPlanner)
+
 ### 1. MongoDB Atlas
 
 1. Create a free M0 cluster at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
