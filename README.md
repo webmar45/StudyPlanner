@@ -62,3 +62,36 @@ Edit `backend/src/main/resources/application.properties` if needed:
 - Quick-add parse: `POST /api/llm/quick-add`
 
 Use `postman_collection.json` to import ready-to-use examples.
+
+## Deploy (free tier)
+
+Stack: **MongoDB Atlas** + **Render** (API) + **Cloudflare Pages** (UI). See [`render.yaml`](render.yaml) for the Render Blueprint.
+
+### 1. MongoDB Atlas
+
+1. Create a free M0 cluster at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+2. Add a database user and allow network access from `0.0.0.0/0` (required for Render free tier).
+3. Copy the connection string for database `smart_study_planner`.
+4. Verify locally: `powershell -File scripts/test-mongodb.ps1 -Uri "mongodb+srv://..."`
+
+### 2. Backend on Render
+
+1. Push this repo to GitHub, then [Render Dashboard](https://dashboard.render.com) → **New** → **Blueprint** → select `render.yaml`.
+2. When prompted, set `MONGODB_URI` to your Atlas URI.
+3. After the frontend is live, set `CORS_ALLOWED_ORIGINS` to your Cloudflare Pages URL (no trailing slash) and redeploy.
+4. Health check: `GET https://<your-service>.onrender.com/api/health`
+
+### 3. Frontend on Cloudflare Pages
+
+1. [Cloudflare Pages](https://pages.cloudflare.com) → **Create project** → connect Git.
+2. **Root directory**: `frontend` | **Build**: `npm install && npm run build` | **Output**: `dist`
+3. **Environment variable** (Production): `VITE_API_BASE_URL=https://<render-host>/api`
+4. SPA routing uses [`frontend/public/_redirects`](frontend/public/_redirects).
+
+### 4. Smoke test
+
+```powershell
+powershell -File scripts/smoke-test.ps1 -ApiBaseUrl "https://your-api.onrender.com/api"
+```
+
+Or run the full checklist: `powershell -File scripts/deploy.ps1`
