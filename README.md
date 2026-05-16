@@ -74,18 +74,18 @@ Stack: **MongoDB Atlas** + **Render** (API) + **Cloudflare Pages** (UI). See [`r
 1. Create a free M0 cluster at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
 2. Add a database user and allow network access from `0.0.0.0/0` (required for Render free tier).
 3. Copy the connection string for database `smart_study_planner`.
-4. Verify locally: `powershell -File scripts/test-mongodb.ps1 -Uri "mongodb+srv://..."`
+4. Verify: `powershell -File scripts/atlas-setup.ps1` (opens Atlas) then `scripts/test-mongodb.ps1 -Uri "mongodb+srv://..."`
 
 ### 2. Backend on Render
 
-1. Push this repo to GitHub, then [Render Dashboard](https://dashboard.render.com) → **New** → **Blueprint** → select `render.yaml`.
+1. Click **Deploy to Render** above, or run `powershell -File scripts/deploy-render.ps1`.
 2. When prompted, set `MONGODB_URI` to your Atlas URI.
 3. After the frontend is live, set `CORS_ALLOWED_ORIGINS` to your Cloudflare Pages URL (no trailing slash) and redeploy.
 4. Health check: `GET https://<your-service>.onrender.com/api/health`
 
 ### 3. Frontend on Cloudflare Pages
 
-1. [Cloudflare Pages](https://pages.cloudflare.com) → **Create project** → connect Git.
+1. [Cloudflare Pages](https://pages.cloudflare.com) → **Create project** → connect Git, or after `npx wrangler login`: `powershell -File scripts/deploy-pages.ps1 -ApiBaseUrl "https://your-api.onrender.com"`.
 2. **Root directory**: `frontend` | **Build**: `npm install && npm run build` | **Output**: `dist`
 3. **Environment variable** (Production): `VITE_API_BASE_URL=https://<render-host>/api`
 4. SPA routing uses [`frontend/public/_redirects`](frontend/public/_redirects).
